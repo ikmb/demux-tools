@@ -4,10 +4,10 @@ From:nfcore/base
 %labels
     MAINTAINER Marc Hoeppner <m.hoeppner@ikmb.uni-kiel.de>
     DESCRIPTION Singularity image containing all requirements for the CCGA demux pipeline
-    VERSION 1.0
+    VERSION 1.1
 
 %environment
-    PATH=/opt/conda/envs/ikmb-demux-1.0/bin:/opt/cellranger-3.1.0:/opt/longranger-2.2.2:/opt/supernova-2.1.1:$PATH
+    PATH=/opt/conda/envs/ikmb-demux-1.0/bin:/opt/cellranger-3.1.0:/opt/longranger-2.2.2:/opt/supernova-2.1.1:/opt/spaceranger-1.0.0:/opt/cellranger-atac-1.2.0:/opt/bcl2fastq/2.20.0/bin:$PATH
     export PATH
 
     CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
@@ -18,8 +18,14 @@ From:nfcore/base
     10x/cellranger-3.1.0.tar.gz /opt
     10x/longranger-2.2.2.tar.gz /opt
     10x/supernova-2.1.1.tar.gz /opt
-
+    10x/spaceranger-1.0.0.tar.gz /opt
+    10x/cellranger-atac-1.2.0.tar.gz /opt
 %post
+
+    # Get CellRanger ATAC
+    cd /opt
+    tar -xvf cellranger-atac-1.2.0.tar.gz
+    rm cellranger-atac-1.2.0.tar.gz
 
     /opt/conda/bin/conda env create -f /environment.yml
     /opt/conda/bin/conda clean -a
@@ -42,10 +48,9 @@ From:nfcore/base
     mkdir build
     cd build
     ../source/src/configure --prefix=/opt/bcl2fastq/2.20.0 LDFLAGS=-I/usr/include/x86_64-linux-gnu CFLAGS=-I/usr/include/x86_64-linux-gnu
-    make install
+    make -j4 install
     cd ..
     rm -Rf source build *.tar.gz *.zip
-    echo 'export PATH=$PATH:/opt/bcl2fastq/2.20.0/bin' >> /environment
 
    # Get cell ranger    
    cd /opt
@@ -62,3 +67,8 @@ From:nfcore/base
    tar -xvf longranger-2.2.2.tar.gz 
    rm longranger-2.2.2.tar.gz
    
+   # Get SpaceRanger
+   cd /opt
+   tar -xvf spaceranger-1.0.0.tar.gz
+   rm spaceranger-1.0.0.tar.gz
+ 
