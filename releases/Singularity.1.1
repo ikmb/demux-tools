@@ -14,20 +14,17 @@ From:nfcore/base
     export CPLUS_INCLUDE_PATH
 
 %files
-    environment.yml /
+    environment-1.1.yml /
 %post
 
     mkdir -p /ifs
     apt-get -y update
     apt-get -y install procps make gcc unzip zlib1g-dev build-essential libc6-dev wget
 
-    /opt/conda/bin/conda env create -f /environment.yml
+    /opt/conda/bin/conda env create -f /environment-1.1.yml
     /opt/conda/bin/conda clean -a
 
-    mkdir -p /ifs
-    apt-get -y update
-    apt-get -y install procps make gcc unzip zlib1g-dev build-essential libc6-dev
-    
+    # Tweaks to make bcl2fastq work
     mkdir -p /usr/include/sys
     cd /usr/include/sys
     ln -s /usr/include/x86_64-linux-gnu/sys/stat.h
@@ -54,13 +51,13 @@ From:nfcore/base
 
    # Get cell ranger    
    cd /opt
-   wget wget -O cellranger-3.1.0.tar.gz "http://cf.10xgenomics.com/releases/cell-exp/cellranger-3.1.0.tar.gz?Expires=1576711236&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2NmLjEweGdlbm9taWNzLmNvbS9yZWxlYXNlcy9jZWxsLWV4cC9jZWxscmFuZ2VyLTMuMS4wLnRhci5neiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU3NjcxMTIzNn19fV19&Signature=QWIpKVBb9WQLi-6y8a8hXN8fFln1qehzTge9i9yTfKbhx34LQMFspzeVRAX7Jwjw93wOp26qLtC8PRt~~TH6STE8tA9Jam1NdegDRjVlQ4UuM~icynhPIpy3-y0pPW8W1WfF9sgw9S8EgHxIVK~VeFXPWqHrzfFQ73oWh-aVlEZWSsdseuQlLReNqD~8I3-en0I~B6yeyh8NR5kf5A8-b5kHj8~p3Mb6M350diXEj~2~i2beGHoEoVgPc5YRPN1if26wGJvJwDH6SwA8zn70uhmFvw8eM2ue81UfApi1ujoI3HZ-D3bWaMQg2rIFUv5SKuqocbL3hcy8W2idd0rdDg__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
+   wget -O cellranger-3.1.0.tar.gz "http://cf.10xgenomics.com/releases/cell-exp/cellranger-3.1.0.tar.gz?Expires=1576711236&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2NmLjEweGdlbm9taWNzLmNvbS9yZWxlYXNlcy9jZWxsLWV4cC9jZWxscmFuZ2VyLTMuMS4wLnRhci5neiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU3NjcxMTIzNn19fV19&Signature=QWIpKVBb9WQLi-6y8a8hXN8fFln1qehzTge9i9yTfKbhx34LQMFspzeVRAX7Jwjw93wOp26qLtC8PRt~~TH6STE8tA9Jam1NdegDRjVlQ4UuM~icynhPIpy3-y0pPW8W1WfF9sgw9S8EgHxIVK~VeFXPWqHrzfFQ73oWh-aVlEZWSsdseuQlLReNqD~8I3-en0I~B6yeyh8NR5kf5A8-b5kHj8~p3Mb6M350diXEj~2~i2beGHoEoVgPc5YRPN1if26wGJvJwDH6SwA8zn70uhmFvw8eM2ue81UfApi1ujoI3HZ-D3bWaMQg2rIFUv5SKuqocbL3hcy8W2idd0rdDg__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
    tar -xvf cellranger-3.1.0.tar.gz
    rm cellranger*.tar.gz
 
    # Get Supernova
    cd /opt
-   wget wget -O supernova-2.1.1.tar.gz "http://cf.10xgenomics.com/releases/assembly/supernova-2.1.1.tar.gz?Expires=1576711280&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2NmLjEweGdlbm9taWNzLmNvbS9yZWxlYXNlcy9hc3NlbWJseS9zdXBlcm5vdmEtMi4xLjEudGFyLmd6IiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNTc2NzExMjgwfX19XX0_&Signature=MUcIQm3X4EnJiysWHp7cMn4Gqd3gDDkbcX3nMYnIGr1ZhchHAmEoghtst70NRA7ibXzlC7PSIMIMIkvF5etuwjeY~uGMHZeuCgWYbY4b3g~uMoCPQF4o9WeQPNlxj6~Sq5aAqvgIb79GV6Wk3s-IYFlHgGAaYU5X35QHCjiRqJuND4wNHIMN1HHqMNA~czbWY8DyuA-ArpkZgZDqj9KFQNPBGxW2rBCJATPEeGOEieydOFBw5CwkPwFJNTCK7D26Pem1w6OUug1amTCxRLm8BJclr2KBQdFWPmWncZwwWXO6Pv-16eqYRMKf~mCwdyEoTZ-B5z~5Tk8uyIe0rc~y3w__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
+   wget -O supernova-2.1.1.tar.gz "http://cf.10xgenomics.com/releases/assembly/supernova-2.1.1.tar.gz?Expires=1576711280&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2NmLjEweGdlbm9taWNzLmNvbS9yZWxlYXNlcy9hc3NlbWJseS9zdXBlcm5vdmEtMi4xLjEudGFyLmd6IiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNTc2NzExMjgwfX19XX0_&Signature=MUcIQm3X4EnJiysWHp7cMn4Gqd3gDDkbcX3nMYnIGr1ZhchHAmEoghtst70NRA7ibXzlC7PSIMIMIkvF5etuwjeY~uGMHZeuCgWYbY4b3g~uMoCPQF4o9WeQPNlxj6~Sq5aAqvgIb79GV6Wk3s-IYFlHgGAaYU5X35QHCjiRqJuND4wNHIMN1HHqMNA~czbWY8DyuA-ArpkZgZDqj9KFQNPBGxW2rBCJATPEeGOEieydOFBw5CwkPwFJNTCK7D26Pem1w6OUug1amTCxRLm8BJclr2KBQdFWPmWncZwwWXO6Pv-16eqYRMKf~mCwdyEoTZ-B5z~5Tk8uyIe0rc~y3w__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
    tar -xvf supernova-2.1.1.tar.gz
    rm supernova-2.1.1.tar.gz
 
