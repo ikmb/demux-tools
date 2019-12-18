@@ -18,7 +18,7 @@ From:nfcore/base
 %post
 
     mkdir -p /ifs
-    apt-get -y update
+    apt-get -y update -o Acquire::Check-Valid-Until=false
     apt-get -y install procps make gcc unzip zlib1g-dev build-essential libc6-dev wget
 
     /opt/conda/bin/conda env create -f /environment-1.1.yml
